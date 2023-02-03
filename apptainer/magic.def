@@ -1,0 +1,25 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y git m4 tcsh csh libx11-dev tcl-dev tk-dev libcairo2-dev mesa-common-dev libglu1-mesa-dev libncurses-dev
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  git clone git://opencircuitdesign.com/magic magic-src 
+  cd magic-src
+  REV=$(git rev-parse --short HEAD)
+  ./configure --prefix=/cad/foss/tools/magic-$REV
+  make database/database.h
+  make -j$(nproc)
+  make install
+  ln -s /cad/foss/tools/magic-$REV /cad/foss/tools/magic
+  rm -rf /tmp/foss_setup/magic-src
+
+%environment
+  export PATH=/cad/foss/tools/magic/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

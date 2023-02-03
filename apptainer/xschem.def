@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y git libx11-6 libx11-dev libxrender1 libxrender-dev libxcb1 libx11-xcb-dev libcairo2 libcairo2-dev tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev flex bison libxpm4 libxpm-dev libjpeg-dev
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  git clone https://github.com/StefanSchippers/xschem.git xschem-src
+  cd xschem-src
+  REV=$(git rev-parse --short HEAD)
+  ./configure --prefix=/cad/foss/tools/xschem-$REV
+  make -j$(nproc)
+  make install
+  ln -s /cad/foss/tools/xschem-$REV /cad/foss/tools/xschem
+  rm -rf /tmp/foss_setup/xschem-src
+
+%environment
+  export PATH=/cad/foss/tools/xschem/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

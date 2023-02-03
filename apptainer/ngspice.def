@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y build-essential autoconf bison flex libtool libreadline-dev git adms
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  git clone git://git.code.sf.net/p/ngspice/ngspice ngspice-src 
+  cd ngspice-src
+  REV=$(git rev-parse --short HEAD)
+  ./autogen.sh --adms
+  set -e
+  ./autogen.sh --adms
+  ./configure --disable-debug --enable-openmp --with-x --with-readline=yes --enable-pss --enable-xspice --with-fftw3=yes --enable-adms --prefix=/cad/foss/tools/ngspice-$REV
+  make -j$(nproc)
+  make install
+  ln -s /cad/foss/tools/ngspice-$REV /cad/foss/tools/ngspice
+  rm -rf /tmp/foss_setup/ngspice-src
+
+%environment
+  export PATH=/cad/foss/tools/ngspice/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

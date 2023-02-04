@@ -9,6 +9,10 @@
 ## xschem  
   apt install -y git libx11-6 libx11-dev libxrender1 libxrender-dev libxcb1 libx11-xcb-dev libcairo2 libcairo2-dev tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev flex bison libxpm4 libxpm-dev libjpeg-dev
 
+## gaw3-xschem
+  apt install -y git build-essential autoconf autopoint libgtk-3-dev libasound2-dev
+  
+
 ## ngspice 
   apt install -y build-essential autoconf bison flex libtool libreadline-dev git adms
 

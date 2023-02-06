@@ -14,7 +14,7 @@
   
 
 ## ngspice 
-  apt install -y build-essential autoconf bison flex libtool libreadline-dev git adms
+  apt install -y build-essential autoconf bison flex libtool libreadline-dev git adms libxaw7-dev
 
 ## klayout
   apt install -y git gcc g++ make qt5-default qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3 python3-dev python3-pip

@@ -19,3 +19,22 @@
 ## klayout
   apt install -y git gcc g++ make qt5-default qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3 python3-dev python3-pip
   python3 -m pip install pandas
+
+## openroad
+  apt install -y tcl-tclreadline
+  mkdir -p /tmp/build_foss
+  cd /tmp/build_foss
+  wget https://github.com/google/or-tools/releases/download/v9.5/or-tools_amd64_ubuntu-20.04_cpp_v9.5.2237.tar.gz
+  mkdir -p /opt/or-tools
+  tar --strip 1 --dir /opt/or-tools/ -xf or-tools_amd64_ubuntu-20.04_cpp_v9.5.2237.tar.gz
+  rm -rf /tmp/build_foss
+
+## yosys
+  apt install -y git build-essential clang bison flex \
+    libreadline-dev gawk tcl-dev libffi-dev git \
+    graphviz xdot pkg-config python3 libboost-system-dev \
+    libboost-python-dev libboost-filesystem-dev zlib1g-dev
+
+## iverilog
+  apt install -y git build-essential autoconf gperf bison flex libreadline-dev
+  apt install -y gtkwave

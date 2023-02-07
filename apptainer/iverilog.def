@@ -1,0 +1,26 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y git build-essential autoconf gperf bison flex libreadline-dev
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  rm -rf /tmp/foss_setup/iverilog-src
+  git clone https://github.com/steveicarus/iverilog.git iverilog-src 
+  cd iverilog-src
+  REV=$(git rev-parse --short HEAD)
+  sh autoconf.sh
+  ./configure --prefix=/cad/foss/tools/iverilog-$REV
+  make -j$(nproc)
+  make install
+  ln -s /cad/foss/tools/iverilog-$REV /cad/foss/tools/iverilog
+  rm -rf /tmp/foss_setup/iverilog-src
+
+%environment
+  export PATH=/cad/foss/tools/iverilog/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

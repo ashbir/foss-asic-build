@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y git
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  rm -rf /tmp/foss_setup/openroad-src
+  git clone https://github.com/The-OpenROAD-Project/OpenROAD.git openroad-src
+  cd openroad-src
+  REV=$(git rev-parse --short HEAD)
+  git submodule update --init --recursive
+  ./etc/DependencyInstaller.sh
+  mkdir -p build && cd build
+  cmake .. "-DCMAKE_INSTALL_PREFIX=/cad/foss/tools/openroad-${REV}" "-DUSE_SYSTEM_BOOST=ON"
+  make -j$(nproc)
+  make install
+  ln -s /cad/foss/tools/openroad-$REV /cad/foss/tools/openroad
+  rm -rf /tmp/foss_setup/openroad-src
+
+%environment
+  export PATH=/cad/foss/tools/openroad/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

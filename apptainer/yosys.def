@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: ubuntu:20.04
+Stage: build
+
+%post
+  export DEBIAN_FRONTEND=noninteractive
+  apt update && apt upgrade -y
+  apt install -y tzdata
+  apt install -y locales
+  locale-gen en_US.UTF-8
+  apt install -y git build-essential clang bison flex \
+	  libreadline-dev gawk tcl-dev libffi-dev git \
+	  graphviz xdot pkg-config python3 libboost-system-dev \
+	  libboost-python-dev libboost-filesystem-dev zlib1g-dev
+  mkdir -p /tmp/foss_setup
+  cd /tmp/foss_setup
+  rm -rf /tmp/foss_setup/yosys-src
+  git clone https://github.com/YosysHQ/yosys.git yosys-src
+  cd yosys-src
+  REV=$(git rev-parse --short HEAD)
+  make PREFIX="/cad/foss/tools/yosys-${REV}" config-gcc
+  make PREFIX="/cad/foss/tools/yosys-${REV}" -j$(nproc)
+  make PREFIX="/cad/foss/tools/yosys-${REV}" install
+  ln -s /cad/foss/tools/yosys-$REV /cad/foss/tools/yosys
+  rm -rf /tmp/foss_setup/yosys-src
+
+%environment
+  export PATH=/cad/foss/tools/yosys/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/bin

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+rm -rf logs reports results
+mkdir -p logs reports results
+
+klayout -b -r ./drc_files/sky130A_mr.drc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_feol_check.xml -rd feol=true | tee ./logs/klayout_feol_check.log
+klayout -b -r /home/fadila/mpw_precheck/checks/tech-files/sky130A_mr.drc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_beol_check.xml -rd beol=true | tee  ./logs/klayout_beol_check.log
+klayout -b -r ./drc_files/sky130A_mr.drc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_offgric_check.xml -rd offgrid=true | tee ./logs/klayout_offgrid_check.log
+klayout -b -r /home/fadila/mpw_precheck/checks/drc_checks/klayout/met_min_ca_density.lydrc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_met_min_ca_check.xml | tee ./logs/klayout_met_min_ca_density_check.log
+klayout -b -r ./drc_files/pin_label_purposes_overlapping_drawing.rb.drc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_pin_label_purposes_overlapping_drawing_check.xml -rd top_cell_name=inv | tee ./logs/klayout_pin_label_purposes_overlapping_drawing_check.log
+klayout -b -r ./drc_files/zeroarea.rb.drc -rd input=inv.gds -rd topcell=inv -rd report=./reports/klayout_zeroarea_check.xml -rd cleaned_output=./results/inv_no_zero_areas.gds | tee ./logs/klayout_zeroarea_check.log

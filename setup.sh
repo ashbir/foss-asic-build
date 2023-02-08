@@ -1,6 +1,10 @@
+#!/bin/bash
+
 #clone and download tools
-sudo apt update && sudo apt upgrade
-cd ~
+curr_dir = $(pwd)
+sudo apt -y update && sudo apt -y upgrade
+mkdir FOSS
+cd FOSS
 git clone https://github.com/ashbir/foss-asic-build.git foss-build
 mkdir cadtar
 cd cadtar
@@ -15,7 +19,7 @@ wget -O xschem.tar "https://github.com/ashbir/foss-asic-build/releases/download/
 wget -O yosys.tar "https://github.com/ashbir/foss-asic-build/releases/download/v0.0.2/yosys-417fadbef.tar.gz"
 
 #build dependency
-cd ~
+cd curr_dir
 cd ./foss-build
 chmod +x build_dependency.sh
 sudo ./build_dependency.sh
@@ -28,7 +32,7 @@ cd cad
 sudo mkdir foss
 cd foss
 sudo mkdir tools
-cd ~
+cd curr_dir
 sudo tar -xf ~/cadtar/gaw.tar -C /cad/foss/tools/
 sudo tar -xf ~/cadtar/iverilog.tar -C /cad/foss/tools
 sudo tar -xf ~/cadtar/klayout.tar -C /cad/foss/tools

@@ -28,6 +28,7 @@ sudo ./build_dependency.sh
 cd curr_dir
 sudo apt-get -y install python3 python3-pip xz-utils
 python3 -m pip install --upgrade --no-cache-dir volare
+volare --version #check if volare has been installed correctly
 ## as per python 3.6, cited from https://pypi.org/project/volare/, one needs to add on .profile:
 ### export PATH="/home/test/.local/bin:$PATH" ###
 

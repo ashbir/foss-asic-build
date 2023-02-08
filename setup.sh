@@ -24,6 +24,21 @@ cd ./foss-build
 chmod +x build_dependency.sh
 sudo ./build_dependency.sh
 
+#install volare
+cd curr_dir
+sudo apt-get -y install python3 python3-pip xz-utils
+python3 -m pip install --upgrade --no-cache-dir volare
+## as per python 3.6, cited from https://pypi.org/project/volare/, one needs to add on .profile:
+### export PATH="/home/test/.local/bin:$PATH" ###
+
+#use volare to download and enable skywater130 PDK (MAKE SURE that you have already defined $PDK and $PDK_ROOT inside ~/.bashrc)
+cd curr_dir
+mkdir PDK
+cd PDK
+volare ls-remote --pdk sky130 #to list all available pre-built PDKs hosted
+## Please copy the latest package commit hash (ex: 4cfc6af9ceba75a2f35c76f89ece76aa539f9a8d)
+volare enable --pdk sky130 4cfc6af9ceba75a2f35c76f89ece76aa539f9a8d #change accordingly
+
 #create folders to store tools and extract them
 cd /
 sudo rm -rf cad/
